@@ -52,9 +52,24 @@ jobs:
         env:
           TF_VAR_gcp_auth_token: ${{ steps.auth.outputs.access_token }}
 
+      - name: Check directory structure
+        run: |
+          ls -la
+          ls -la ../src
+          ls -la ../docker
+        working-directory: 01-flex-template/infra
+
+      # Garante que o api artifact está habilitado
+      - name: Enable Artifact Registry API
+        run: |-
+          gcloud services enable artifactregistry.googleapis.com --project=${{ secrets.PROJECT_ID }}
+        env:
+          CLOUDSDK_AUTH_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+
       # Builds or changes infrastructure
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: 01-flex-template/infra
         env:
           TF_VAR_gcp_auth_token: ${{ steps.auth.outputs.access_token }}
+ 

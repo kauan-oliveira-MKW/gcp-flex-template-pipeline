@@ -14,9 +14,9 @@ resource "docker_image" "dataflow_template" {
   name     = "${var.region}-docker.pkg.dev/${var.project_id}/dataflow-templates/minha-template:v1"
   
   build {
-    context    = "${path.module}/../../src"  # Caminho para o código-fonte
-    dockerfile = "${path.module}/../docker/Dockerfile"  # Caminho para o Dockerfile
-  }
+  context    = "${path.module}/.."  # Isso aponta para o diretório 01-flex-template
+  dockerfile = "docker/Dockerfile"  # Relativo ao contexto
+}
 }
 
 # Push para o Artifact Registry

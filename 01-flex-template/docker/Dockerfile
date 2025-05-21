@@ -7,9 +7,8 @@ RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 
 # Copia os arquivos do pipeline (o contexto é definido no Terraform)
-COPY /src/requirements.txt ${WORKDIR}/
-COPY /src/pipeline.py ${WORKDIR}/
-
+COPY ./requirements.txt ${WORKDIR}/
+COPY ./pipeline.py ${WORKDIR}/
 # Variáveis de ambiente exigidas pelo Dataflow
 ENV FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE="${WORKDIR}/requirements.txt"
 ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/pipeline.py"

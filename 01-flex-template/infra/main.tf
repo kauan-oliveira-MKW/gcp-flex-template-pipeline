@@ -1,26 +1,35 @@
-# Provider Docker autenticado no GCP
 provider "docker" {
+
   alias = "gcr_provider"
+
   registry_auth {
-    address  = "${var.region}-docker.pkg.dev"
-    username = "oauth2accesstoken"
-    password = var.gcp_auth_token  # Token gerado via GitHub Actions ou gcloud
+
+    address  = var.docker_address
+    username = var.docker_username
+    password = var.gcp_auth_token # comes from GitHub Actions
+
   }
 }
 
-# Build da imagem Docker
-resource "docker_image" "dataflow_template" {
+# Build the Docker image and push it to GCR.
+resource "docker_image" "image" {
+
   provider = docker.gcr_provider
-  name     = "${var.region}-docker.pkg.dev/${var.project_id}/dataflow-templates/minha-template:v1"
-  
+  name     = "${var.docker_address}/${var.project_id}/${var.docker_path}/${var.docker_image_name}:${var.docker_image_tag}"
+
   build {
-  context    = "${path.module}/.."  # Isso aponta para o diretório 01-flex-template
-  dockerfile = "docker/Dockerfile"  # Relativo ao contexto
-}
+
+    context    = "${path.root}/../src"
+    dockerfile = "${path.root}/../docker/Dockerfile"
+
+  }
+
 }
 
-# Push para o Artifact Registry
-resource "docker_registry_image" "push_image" {
-  provider = docker.gcr_provider
-  name     = docker_image.dataflow_template.name
+resource "docker_registry_image" "dataflow_image" {
+
+  provider      = docker.gcr_provider
+  name          = docker_image.image.name
+  keep_remotely = true
+
 }

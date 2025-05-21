@@ -1,6 +1,10 @@
 # Base image oficial do Dataflow
 FROM gcr.io/dataflow-templates-base/python3-template-launcher-base
 
+ARG WORKDIR=/dataflow/template
+RUN mkdir -p ${WORKDIR}
+WORKDIR ${WORKDIR}
+
 # Diretório de trabalho no container
 ARG WORKDIR=/dataflow/template
 RUN mkdir -p ${WORKDIR}

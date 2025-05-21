@@ -54,9 +54,10 @@ jobs:
 
       - name: Check directory structure
         run: |
+          pwd
           ls -la
-          ls -la ../src
-          ls -la ../docker
+          ls -la ../..
+          ls -la ../../docker
         working-directory: 01-flex-template/infra
 
       # Garante que o api artifact está habilitado
